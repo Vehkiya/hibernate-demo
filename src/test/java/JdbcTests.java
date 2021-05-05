@@ -41,6 +41,7 @@ class JdbcTests {
             final ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             final int count = resultSet.getInt("cnt");
+            System.out.println("Count is " + count);
             Assertions.assertEquals(77, count);
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();

@@ -5,7 +5,6 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.persistence.spi.PersistenceProvider;
 import java.util.List;
 
 public class HibernateTests {
@@ -52,7 +51,6 @@ public class HibernateTests {
     @Test
     void criteriaQueryTest() {
         final Session session = sessionFactory.openSession();
-
         final CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         final CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         final Root<Product> root = criteriaQuery.from(Product.class);
@@ -71,5 +69,30 @@ public class HibernateTests {
         final EntityManager entityManager = emf.createEntityManager();
         final Product product = entityManager.find(Product.class, 1L);
         Assertions.assertEquals(1L, product.getId());
+    }
+
+    @Test
+    void updateTest() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnit");
+        final EntityManager entityManager = emf.createEntityManager();
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        final Product product = entityManager.find(Product.class, 1L);
+        product.setName("Chai");
+        entityManager.merge(product);
+        transaction.commit();
+    }
+
+    @Test
+    void insertTest() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnit");
+        final EntityManager entityManager = emf.createEntityManager();
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        Product product = new Product();
+        product.setId(900L);
+        product.setName("TestProduct");
+        entityManager.persist(product);
+        transaction.commit();
     }
 }
