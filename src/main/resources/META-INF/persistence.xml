@@ -7,11 +7,11 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>models.Product</class>
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:sqlserver://vault.local:1433;databaseName=Northwind"/>
+                      value="jdbc:h2:mem://localhost:1433;databaseName=Northwind"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
-            <property name="javax.persistence.jdbc.password" value="Banana!2"/>
+            <property name="javax.persistence.jdbc.password" value="password"/>
             <property name="hibernate.show_sql" value="true"/>
         </properties>
 
